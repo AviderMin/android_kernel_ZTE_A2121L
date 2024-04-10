@@ -1,0 +1,17 @@
+/*
+ * this file is ued to change sprd dtsi which can't be changed by overlay
+ * such as /delete-node/ /delete-property/ and alises
+ */
+
+#include "../bat_setting/battery_protect_policy_080509200080.dtsi"
+#include "zte_lcd.dtsi"
+#include "touchscreen_smooth.dtsi"
+
+
+&i2c4 {
+	/delete-node/ fan54015_chg;
+};
+&i2c1 {
+	/delete-node/ sensor-main2@6C;
+};
+

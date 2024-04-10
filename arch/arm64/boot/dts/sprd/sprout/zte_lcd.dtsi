@@ -1,0 +1,10 @@
+
+#include "zte_lcd_ili9881c_mipi_skyworth_hd.dtsi"
+#include "zte_lcd_tongxingda_hx8394f_hsd_6p26_hd.dtsi"
+
+&i2c4 {
+	ti65132b@3e {
+		compatible = "tps,ti65132b";
+		reg = <0x3e>;
+	};
+};

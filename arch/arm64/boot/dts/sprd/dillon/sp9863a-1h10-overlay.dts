@@ -1,0 +1,69 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+	fragment {
+		target-path = "/";
+		__overlay__ {
+			goodix_fp{
+				compatible = "goodix,fingerprint";
+				fp-gpio-reset = <&ap_gpio 131 0x00>;
+				fp-gpio-irq = <&ap_gpio 130 0x00>;
+				fp-gpio-pwr = <&ap_gpio 138 0x00>;
+			};
+
+			sunwave_fp {
+				compatible = "sunwave,fingerprint";
+				sunwave,gpio_reset = <&ap_gpio 131 0x00>;
+				sunwave,gpio_irq = <&ap_gpio 130 0x00>;
+				sunwave,gpio_pwr = <&ap_gpio 138 0x00>;
+			};
+
+			chipone_fp {
+				compatible = "chipone,fingerprint";
+				fpreset-gpios = <&ap_gpio 131 0x00>;
+				fpint-gpios = <&ap_gpio 130 0x00>;
+				fppwr-gpios = <&ap_gpio 138 0x00>;
+			};
+
+		};
+	};
+
+};
+
+
+&sound_vbc_r1p0v3_sprd_codec {
+	sprd-audio-card,routing =
+		"HPMIC", "HP Mic Jack",
+		"MIC", "Mic Jack",
+		"AUXMIC", "Aux Mic Jack",
+		"inter HP PA", "HP PA",
+		"inter Spk PA", "Spk PA",
+		"Ext Spk", "HP PA",
+		"inter Ear PA", "EAR",
+		"DMIC", "DMic Jack",
+		"DMIC1", "DMic1 Jack",
+
+		/* For vbc loopback */
+		"Aud input", "AD Clk",
+		"Aud input1", "AD Clk",
+		"Aud input", "Digital ADCL Switch",
+		"Aud input", "Digital ADCR Switch",
+		"Aud input1", "Digital ADC1L Switch",
+		"Aud input1", "Digital ADC1R Switch";
+	/* ext_control_type, hook selection, mode, gpio share */
+	/*sprd,spk-ext-pa-info = <0 0 1 0>;*/
+	/*sprd,spk-ext-pa-gpio = <&ap_gpio 63 0>;*/
+	/*sprd,spk-ext-pa-names = "ext_spk_r";*/
+};
+
+&sdio0 {
+	cd-gpios =<&eic_async 9 0>;
+	/delete-property/ sd-uhs-sdr104;
+};
+
+&ddr_dfs {
+	sprd-scene = "boost", "lcdon", "lcdoff", "camlow",
+			"camhigh", "camveryhigh";
+	sprd-freq = <933 400 233 933 933 933>;
+};

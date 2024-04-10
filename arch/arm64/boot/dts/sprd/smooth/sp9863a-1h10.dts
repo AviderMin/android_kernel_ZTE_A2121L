@@ -1,0 +1,231 @@
+/*****************************************
+Do not modify dts file, please modify according dtsi file
+******************************************/
+
+#include "../sp9863a-1h10.dts"
+#include "sprd_base_diff.dtsi"
+
+&i2c1 {
+	/delete-node/ sensor-sub2@2a;
+};
+
+&i2c1 {
+	/delete-node/ sensor-sub@20;
+};
+
+&i2c1 {
+	/delete-node/ sensor-main2@6C;
+};
+
+&i2c1 {
+	status = "okay";
+	clock-frequency = <400000>;
+
+	sensor_sub: sensor-sub@20 {
+		compatible = "sprd,sensor-sub";
+		reg = <0x20>;
+		clock-names = "clk_src","sensor_eb",
+			"clk_96m","clk_76m8",
+			"clk_48m","clk_26m";
+		clocks = <&aon_clk CLK_SENSOR1>, <&mm_gate CLK_SENSOR1_EB>,
+			<&pll CLK_TWPLL_96M>,<&pll CLK_TWPLL_76M8>,
+			<&pll CLK_TWPLL_48M>,<&ext_26m>;
+		vddio-supply = <&vddcamio>;
+		vddcama-supply = <&vddcama>;
+		vddcamd-supply = <&vddcamd>;
+		vddcammot-supply = <&vddcammot>;
+		dvdd-gpios=<&ap_gpio 132 0>;
+		avdd-gpios=<&ap_gpio 85 0>;
+		reset-gpios = <&ap_gpio 41 0>;
+		power-down-gpios = <&ap_gpio 40 0>;
+		sprd,phyid = <0>;
+		csi = <&csi0>;
+	};
+};
+
+&i2c1 {
+	sensor_main2: sensor-main2@6C {
+		compatible = "sprd,sensor-main2";
+		reg = <0x6C>;
+		clock-names = "clk_src","sensor_eb",
+			"clk_96m","clk_76m8",
+			"clk_48m","clk_26m";
+		clocks = <&aon_clk CLK_SENSOR1>, <&mm_gate CLK_SENSOR1_EB>,
+			<&pll CLK_TWPLL_96M>,<&pll CLK_TWPLL_76M8>,
+			<&pll CLK_TWPLL_48M>,<&ext_26m>;
+		vddio-supply = <&vddcamio>;
+		vddcama-supply = <&vddcama>;
+		vddcamd-supply = <&vddcamd>;
+		vddcammot-supply = <&vddcammot>;
+		/*avdd-gpios=<&ap_gpio 140 0>;*/
+		reset-gpios = <&ap_gpio 45 0>;
+		power-down-gpios = <&ap_gpio 47 0>;
+		sprd,phyid = <2>;
+		csi = <&csi1>;
+	};
+};
+
+&i2c0 {
+	/delete-node/ sensor-main@20;
+};
+
+&i2c0 {
+	status = "okay";
+	clock-frequency = <400000>;
+
+	sensor_main: sensor-main@20 {
+		compatible = "sprd,sensor-main";
+		reg = <0x20>;
+		clock-names = "clk_src","sensor_eb",
+			"clk_96m","clk_76m8",
+			"clk_48m","clk_26m";
+		clocks = <&aon_clk CLK_SENSOR0>, <&mm_gate CLK_SENSOR0_EB>,
+			<&pll CLK_TWPLL_96M>,<&pll CLK_TWPLL_76M8>,
+			<&pll CLK_TWPLL_48M>,<&ext_26m>;
+		vddio-supply = <&vddcamio>;
+		vddcama-supply = <&vddcama>;
+		vddcamd-supply = <&vddcamd>;
+		vddcammot-supply = <&vddcammot>;
+		avdd-gpios=<&ap_gpio 97 0>;
+		reset-gpios = <&ap_gpio 44 0>;
+		sprd,phyid = <1>;
+		csi = <&csi0>;
+	};
+};
+
+&i2c4 {
+	/delete-node/ flash-ic@63;
+	/delete-node/ charger@6a;
+};
+
+&i2c4 {
+	bq2560x_chg: charger@6b {
+		compatible = "ti,bq25601_chg";
+		reg = <0x6b>;
+		phys = <&hsphy>;
+		monitored-battery = <&bat>;
+		vddvbus:otg-vbus {
+			regulator-name = "vddvbus";
+		};
+	};
+
+	flash_ic: flash-ic@63 {
+		compatible = "sprd,flash-aw3648";
+		reg = <0x63>;
+		sprd,flash-ic = <3648>;
+		sprd,torch = <1>;
+		sprd,preflash = <1>;
+		sprd,highlight = <1>;
+		sprd,torch-level = <10>;
+		sprd,preflash-level = <10>;
+		sprd,highlight-level = <15>;
+		sprd,lvfm-enable = <1>;
+		flash-chip-en-gpios = <&ap_gpio 89 0>;
+		flash-en-gpios = <&ap_gpio 76 0>;
+		flash-sync-gpios = <&ap_gpio 141 0>;
+	};
+
+	nfc_pn5xx: pn544@29 {
+		compatible = "nxp,pn544";
+		reg = <0x29>;
+		interrupt-parent = <&ap_gpio>;
+		interrupts = <94 0>;
+		nxp,pn544-irq = <&ap_gpio 121 0>;
+		nxp,pn544-clkreq = <&ap_gpio 94 0>;
+		nxp,pn544-ven = <&ap_gpio 95 0>;
+		nxp,pn544-fw-dwnld = <&ap_gpio 96 0>;
+		interrupt-names = "nfc_int";
+		clock-names = "bb_clk","source","enable";
+		clocks =<&aon_clk CLK_AUX1>,<&ext_26m>,<&aonapb_gate CLK_AUX1_EB>;
+	};
+};
+
+&bat {
+		charge-term-current-microamp = <150000>;
+		constant_charge_voltage_max_microvolt = <4400000>;
+		constant_charge_current_max_microamp = <2170000>;
+		voltage-min-design-microvolt = <3450000>;
+		ocv-capacity-celsius = <25>;
+		batt-id-list = <390 270>;  /* kohm, tianmao / weike */
+		charge-full-design-microamp-hours = <3200000>;
+		factory-internal-resistance-micro-ohms = <254000>;
+		ocv-capacity-table-0 = <4362000 100>, <4303000 95>, <4246000 90>,
+					<4191000 85>, <4137000 80>, <4085000 75>,
+					<4038000 70>, <3992000 65>, <3945000 60>,
+					<3890000 55>, <3857000 50>, <3832000 45>,
+					<3812000 40>, <3795000 35>, <3779000 30>,
+					<3759000 25>, <3739000 20>, <3714000 15>,
+					<3686000 10>, <3672000 5>, <3400000 0>;
+		charge-full-design2-microamp-hours = <3171000>;
+		factory-internal-resistance2-micro-ohms = <139000>;
+		ocv-capacity-table2-0 = <4370000 100>, <4304000 95>, <4245000 90>,
+					<4187000 85>, <4132000 80>, <4080000 75>,
+					<4031000 70>, <3982000 65>, <3944000 60>,
+					<3892000 55>, <3852000 50>, <3827000 45>,
+					<3807000 40>, <3791000 35>, <3778000 30>,
+					<3761000 25>, <3743000 20>, <3719000 15>,
+					<3689000 10>, <3678000 5>, <3400000 0>;
+		voltage-temp-table = <1124000 750>, <1104000 800>, <1079000 850>,
+					<1047000 900>, <1010000 950>, <967000 1000>,
+					<917000 1050>, <861000 1100>, <801000 1150>,
+					<738000 1200>, <672000 1250>, <607000 1300>,
+					<543000 1350>, <482000 1400>, <425000 1450>,
+					<372000 1500>, <325000 1550>, <282000 1600>,
+					<243000 1650>, <208000 1700>, <178000 1750>;
+		charge-sdp-current-microamp = <700000 500000>;
+		charge-dcp-current-microamp = <2170000 1600000>;
+		charge-cdp-current-microamp = <2170000 1600000>;
+		charge-unknown-current-microamp = <700000 500000>;
+	};
+
+&pmic_fgu {
+	monitored-battery = <&bat>;
+	sprd,calib-resistance-real = <9900>;
+	sprd,calib-resistance-spec = <20000>;
+	io-channels = <&pmic_adc 0>, <&pmic_adc 3>, <&pmic_adc 14>;
+	io-channel-names = "adc-batt-id", "bat-temp", "charge-vol";
+};
+
+/ {
+	charger-manager {
+		cm-fullbatt-voltage = <4350000>;
+		cm-fullbatt-current = <150000>;
+
+		/* in deci centigrade */
+		cm-battery-cold = <0>;
+		cm-battery-hot = <550>;
+		cm-battery-temp-diff = <30>;
+		cm-tickle-time-out = <180>;
+
+		cm-jeita-temp-table = <1000 1030 0 4400000>,
+				<1050 1080 310000 4400000>,
+				<1100 1130 930000 4400000>,
+				<1450 1420 2170000 4400000>,
+				<1550 1520 1080000 4100000>;
+
+		cm-chargers = "hook";
+		cm-hardware-psy = "bq25601_charger";
+		monitored-battery = <&bat>;
+		phys = <&hsphy>;
+		regulator@0 {
+			cable@0 {
+				extcon = <&extcon_gpio>;
+			};
+		};
+	};
+};
+
+&usb {
+	extcon = <&extcon_gpio>;
+	vbus-supply = <&vddvbus>;
+};
+
+&hsphy {
+	vdd-supply = <&vddusb33>;
+	extcon = <&extcon_gpio>;
+};
+
+&pmic_typec {
+	status = "disabled";
+};
+

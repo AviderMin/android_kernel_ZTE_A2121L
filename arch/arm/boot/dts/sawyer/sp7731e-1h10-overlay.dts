@@ -1,0 +1,77 @@
+/*
+ * Spreadtrum sharkle sp7731e board DTS file
+ *
+ * Copyright (C) 2019, Spreadtrum Communications Inc.
+ *
+ * This file is licensed under a dual GPLv2 or X11 license.
+ */
+/dts-v1/;
+/plugin/;
+#include <dt-bindings/input/input.h>
+#include <dt-bindings/gpio/gpio.h>
+
+/ {
+	/*
+	* When create a new node, we should use the key word __overlay__,
+	* otherwise u-boot can not analyze it.
+	*/
+	fragment {
+		target-path = "/";
+		__overlay__ {
+			gpio-keys {
+				compatible = "gpio-keys";
+
+				key-volumedown {
+					label = "Volume Down Key";
+					linux,code = <KEY_VOLUMEDOWN>;
+					gpios = <&eic_debounce 2 GPIO_ACTIVE_LOW>;
+					debounce-interval = <2>;
+					wakeup-source;
+				};
+
+				key-volumeup {
+					label = "Volume Up Key";
+					linux,code = <KEY_VOLUMEUP>;
+					gpios = <&pmic_eic 9 GPIO_ACTIVE_HIGH>;
+					debounce-interval = <2>;
+					wakeup-source;
+				};
+
+				key-power {
+					label = "Power Key";
+					linux,code = <KEY_POWER>;
+					gpios = <&pmic_eic 1 GPIO_ACTIVE_LOW>;
+					debounce-interval = <2>;
+					wakeup-source;
+				};
+			};
+
+			cdfinger {
+				compatible = "cdfinger,fps980";
+				rst-gpios = <&ap_gpio 14 0x00>;
+				irq-gpios = <&eic_async 13 0x00>;
+				avdd-gpios = <&ap_gpio 13 0x00>;
+			};
+
+			sunwave_fp {
+				compatible = "sunwave,fingerprint";
+				sunwave,gpio_reset = <&ap_gpio 14 0x00>;
+				sunwave,gpio_irq = <&eic_async 13 0x00>;
+				sunwave,gpio_pwr = <&ap_gpio 13 0x00>;
+			};
+
+		};
+	};
+};
+
+&i2c1 {
+	status = "okay";
+	clock-frequency = <400000>;
+};
+
+&ddr_dfs {
+	sprd-scene = "lcdon", "lcdoff", "camlow", "camhigh";
+	sprd-freq = <256 256 384 533>;
+	overflow = <6140000 9216000 4294967295 4294967295>;
+	underflow = <1 6040000 8216000 4294967295>;
+};

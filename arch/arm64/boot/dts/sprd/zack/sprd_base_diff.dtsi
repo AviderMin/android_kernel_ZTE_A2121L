@@ -1,0 +1,25 @@
+/*
+ * this file is ued to change sprd dtsi which can't be changed by overlay
+ * such as /delete-node/ /delete-property/ and alises
+ */
+
+#include "zte_lcd.dtsi"
+#include "touchscreen_zack.dtsi"
+#include "zte_sar_zach.dtsi"
+#include "../bat_setting/battery_protect_policy_080509200090.dtsi"
+
+/{
+	/*fingerprint nav*/
+	zte_fp_nav: zte_fp_nav {
+		status="okay";
+		compatible = "zte_fp_nav";
+	};
+};
+
+&i2c4 {
+	/delete-node/ fan54015_chg;
+};
+&i2c1 {
+	/delete-node/ sensor-main2@6C;
+};
+

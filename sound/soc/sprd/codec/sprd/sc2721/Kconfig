@@ -1,0 +1,9 @@
+config SND_SOC_SPRD_CODEC_SC2721
+	tristate "Sprd codec sc2721"
+	help
+	  If the codec is the series of sc2721, set this to Y or M, else N.
+
+config ZTE_EXTEND_DEBOUNCE_TIME
+	tristate "ZTE_EXTEND_DEBOUNCE_TIME"
+	help
+	  Say Y or M here if you want to extend the headset detect debounce time

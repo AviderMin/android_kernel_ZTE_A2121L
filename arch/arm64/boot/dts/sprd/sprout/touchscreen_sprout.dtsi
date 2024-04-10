@@ -1,0 +1,25 @@
+&i2c3 {
+	status = "okay";
+	clock-frequency = <400000>;
+	/delete-node/ adaptive-touchscreen@38;
+	synaptics_dsx@22 {
+		compatible = "synaptics,dsx-i2c";
+		reg = <0x22>;
+		synaptics,irq-gpio = <&ap_gpio 144 0x2008>;
+		synaptics,reset-gpio = <&ap_gpio 145 0>;
+/*		synaptics,power-gpio = <&ap_gpio 62 0>;*/
+		synaptics,power-on-state = <1>;
+		synaptics,irq-on-state = <0>;
+		synaptics,reset-on-state = <0>;
+		synaptics,power-delay-ms = <100>;
+		synaptics,reset-delay-ms = <100>;
+		synaptics,reset-active-ms = <20>;
+	};
+	goodix_ts@5d {
+		compatible = "goodix,gt1x";
+		reg = <0x5d>;
+		goodix,rst-gpio = <&ap_gpio 145 0>;
+		goodix,irq-gpio = <&ap_gpio 144 0x2008>;
+		goodix,power-gpio = <&ap_gpio 62 0>;
+	};
+};

@@ -1,0 +1,100 @@
+/ { lcds {
+	lcd_rm682c9_visionox_6p92_1080plus: lcd_rm682c9_visionox_6p92_1080plus {
+		zte,lcd-init-code-version = "20201012_v0";
+		zte,lcd-backlight-register-bit-length = <0x0b>;
+		zte,lcm_backlight_curve_mode = "lcd_brightness_max_450_lux";
+		zte,lcd-disable-ssc;
+		zte,lcd-ctrl-tp-resetpin;
+
+		sprd,dsi-work-mode = <0>; /* cmd mode*/
+		sprd,dsi-lane-number = <4>;
+		sprd,dsi-color-format = "rgb888";
+
+		sprd,phy-bit-clock = <1180000>;  /* kbps */
+		sprd,phy-escape-clock = <20000>;/* kHz */
+
+		sprd,width-mm = <70632>;
+		sprd,height-mm = <160884>;
+		zte,panel-name = "lcd_rm682c9_visionox_6p92_1080_GVO_60HZ_plus";
+
+
+		sprd,reset-on-sequence = <1 10>, <0 10>, <1 20>;
+		sprd,reset-off-sequence = <0 5>;
+		sprd,initial-command = [
+			39 00 00 02 FE 00
+			39 00 00 02 B0 03
+			39 00 00 02 83 43
+			39 00 00 02 B0 04
+			39 00 00 02 83 04
+			39 00 00 02 B0 05
+			39 00 00 02 83 02
+			39 00 00 02 B0 06
+			39 00 00 02 83 07
+			39 00 00 02 B0 07
+			39 00 00 02 83 08
+			39 00 00 02 B0 08
+			39 00 00 02 83 03
+			39 00 00 02 B0 09
+			39 00 00 02 83 05
+			39 00 00 02 B0 0A
+			39 00 00 02 83 00
+			39 00 00 02 FE 40
+			39 00 00 02 BE 17
+			39 00 00 02 BF BB
+			39 00 00 02 C0 DD
+			39 00 00 02 C1 FF
+			39 00 00 02 FE 12
+			39 00 00 02 83 20
+			39 00 00 02 FE 00
+			39 00 00 02 C2 08
+			39 00 00 02 35 00
+			39 00 00 02 53 2C
+			39 00 00 03 51 00 00
+			05 64 00 01 11
+			05 14 00 01 29
+			];
+		sprd,sleep-in-command = [
+			39 32 00 02 28 00
+			39 20 00 02 10 00
+			39 00 00 02 FE 00
+			39 00 00 02 4f 01
+			];
+		sprd,sleep-out-command = [
+			13 64 00 01 11
+			13 14 00 01 29
+			];
+		sprd,doze-in-command = [
+			39 28 00 02 FE 00
+			39 00 00 02 39 00
+			];
+		sprd,doze-out-command = [
+			39 32 00 02 FE 00
+			39 00 00 02 38 00
+			];
+
+		display-timings {
+			timing0 {
+			clock-frequency = <192000000>;
+			hactive = <1080>;
+			vactive = <2460>;
+			hback-porch = <0>;
+			hfront-porch = <0>;
+			vback-porch = <0>;
+			vfront-porch = <0>;
+			hsync-len = <0>;
+			vsync-len = <0>;
+			};
+		};
+
+		oled-backlight {
+			default-brightness-level = <815>;
+			sprd,max-level = <2047>;
+			brightness-levels = [
+				39 00 00 03 51 00 00
+				39 00 00 02 53 2C
+			];
+		};
+
+	};
+};};
+

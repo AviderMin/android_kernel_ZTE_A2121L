@@ -1,0 +1,18 @@
+
+#include "zte_lcd_skyworth_icnl9911s_huajiacai_6p_hd_3lane.dtsi"
+#include "zte_lcd_lead_hx83102d_auo_6p_hd_3lane.dtsi"
+#include "zte_lcd_skyworth_icnl9911c_huajiacai_6p_hd_3lane.dtsi"
+#include "zte_lcd_lead_hx83102d_ai_auo_6p_hd_3lane.dtsi"
+
+&dphy {
+	/delete-property/ sprd,ulps-disabled;
+};
+
+&i2c4 {
+	ti65132b@3e {
+		compatible = "tps,ti65132b";
+		reg = <0x3e>;
+		/*if set tps65132b_enhance_value,means bigger than this board_id*/
+		zte,tps65132b_enhance_value = <2>;/**/
+	};
+};

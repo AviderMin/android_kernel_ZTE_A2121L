@@ -1,0 +1,79 @@
+/*****************************************
+Do not modify dts file, please modify according dtsi file
+******************************************/
+#include "../sp7731e-1h10-native.dts"
+#include "sprd_base_diff.dtsi"
+
+&bat {
+		charge-term-current-microamp = <140000>;
+		constant_charge_voltage_max_microvolt = <4350000>;
+		constant_charge_current_max_microamp = <700000>;
+		voltage-min-design-microvolt = <3450000>;
+		ocv-capacity-celsius = <25>;
+		batt-id-list = <47 270>;  /* kohm, fenghua/weike */
+		charge-full-design-microamp-hours = <2702000>;
+		factory-internal-resistance-micro-ohms = <263000>;
+		ocv-capacity-table-0 = <4322000 100>, <4229000 95>, <4168000 90>,
+					<4133000 85>, <4068000 80>, <4004000 75>,
+					<3968000 70>, <3930000 65>, <3894000 60>,
+					<3858000 55>, <3814000 50>, <3792000 45>,
+					<3779000 40>, <3776000 35>, <3774000 30>,
+					<3767000 25>, <3746000 20>, <3699000 15>,
+					<3602000 10>, <3529000 5>, <3400000 0>;
+		charge-full-design2-microamp-hours = <2646000>;
+		factory-internal-resistance2-micro-ohms = <221000>;
+		ocv-capacity-table2-0 = <4323000 100>, <4242000 95>, <4181000 90>,
+					<4126000 85>, <4075000 80>, <4021000 75>,
+					<3978000 70>, <3939000 65>, <3903000 60>,
+					<3864000 55>, <3821000 50>, <3799000 45>,
+					<3784000 40>, <3775000 35>, <3773000 30>,
+					<3764000 25>, <3747000 20>, <3725000 15>,
+					<3676000 10>, <3567000 5>, <3400000 0>;
+		voltage-temp-table = <1124000 750>, <1104000 800>, <1079000 850>,
+					<1047000 900>, <1010000 950>, <967000 1000>,
+					<917000 1050>, <861000 1100>, <801000 1150>,
+					<738000 1200>, <672000 1250>, <607000 1300>,
+					<543000 1350>, <482000 1400>, <425000 1450>,
+					<372000 1500>, <325000 1550>, <282000 1600>,
+					<243000 1650>, <208000 1700>, <178000 1750>;
+		/delete-property/ capacity-temp-table;
+		charge-sdp-current-microamp = <500000 500000>;
+		charge-dcp-current-microamp = <700000 700000>;
+		charge-cdp-current-microamp = <700000 700000>;
+		charge-unknown-current-microamp = <500000 500000>;
+	};
+
+&pmic_fgu {
+	monitored-battery = <&bat>;
+	sprd,calib-resistance-real = <10000>;
+	sprd,calib-resistance-spec = <20000>;
+	io-channels =  <&pmic_adc 0>, <&pmic_adc 4>, <&pmic_adc 14>;
+	io-channel-names = "adc-batt-id", "bat-temp", "charge-vol";
+};
+
+/ {
+	charger-manager {
+		cm-fullbatt-voltage = <4310000>;
+		cm-fullbatt-current = <150000>;
+
+		/* in deci centigrade */
+		cm-battery-cold = <0>;
+		cm-battery-hot = <550>;
+		cm-battery-temp-diff = <30>;
+		cm-tickle-time-out = <180>;
+
+		/* use feed charger watchdog func to print logs */
+		cm-wdt-interval = <60>;
+
+		cm-jeita-temp-table = <1000 1030 0 4350000>,
+				<1050 1080 600000 4350000>,
+				<1150 1180 700000 4350000>,
+				<1450 1420 700000 4350000>,
+				<1550 1520 600000 4100000>;
+
+		cm-chargers = "hook";
+		cm-hardware-psy = "sc2720_charger";
+		monitored-battery = <&bat>;
+		phys = <&hsphy>;
+	};
+};

@@ -1,0 +1,35 @@
+/*
+ * this file is ued to change sprd dtsi which can't be changed by overlay
+ * such as /delete-node/ /delete-property/ and alises
+ */
+#include "toushcreen_sawyer.dtsi"
+#include "zte_lcd_lead_st7701s_ctc_5p99_480p.dtsi"
+#include "zte_lcd_easyquick_gc9503p_boe_5p99_480p.dtsi"
+#include "zte_lcd_coe_st7701s_ivo_5p99_480p.dtsi"
+#include "../lcd/lcd_dummy_mipi.dtsi"
+#include "../bat_setting/battery_protect_policy_080500100338.dtsi"
+#include "zte_sensor_sawyer.dtsi"
+/{
+	/*fingerprint nav*/
+	zte_fp_nav: zte_fp_nav {
+		status="okay";
+		compatible = "zte_fp_nav";
+	};
+};
+
+&isp {
+	clock-names = "isp_eb",
+		"isp_axi_eb",
+		"isp_clk",
+		"isp_clk_high_parent",
+		"isp_clk_low_parent",
+		"isp_axi_clk",
+		"isp_axi_clk_parent";
+	clocks = <&mm_gate CLK_ISP_EB>,
+		<&mm_gate CLK_MISP_AXI_EB>,
+		<&mm_clk CLK_ISP>,
+		<&pll CLK_TWPLL_307M2>,
+		<&pll CLK_TWPLL_128M>,
+		<&mm_clk CLK_ISP_AXI>,
+		<&pll CLK_TWPLL_512M>;
+};

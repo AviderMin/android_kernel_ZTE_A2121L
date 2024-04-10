@@ -1,0 +1,372 @@
+/*****************************************
+Do not modify dts file, please modify according dtsi file
+******************************************/
+
+#include "../sp9863a-1h10.dts"
+#include "sprd_base_diff.dtsi"
+
+&i2c1 {
+	/delete-node/ sensor-main2@6c;
+};
+
+&i2c1 {
+	/delete-node/ sensor-sub@20;
+};
+
+&i2c0 {
+	/delete-node/ sensor-main@20;
+};
+
+&i2c1 {
+	/delete-node/ sensor-sub2@2a;
+};
+
+&i2c1 {
+	status = "okay";
+	clock-frequency = <400000>;
+
+	//front 8M
+	sensor_sub: sensor-sub@30 {
+		compatible = "sprd,sensor-sub";
+		reg = <0x30>;
+		clock-names = "clk_src","sensor_eb",
+			"clk_96m","clk_76m8",
+			"clk_48m","clk_26m";
+		clocks = <&aon_clk CLK_SENSOR0>, <&mm_gate CLK_SENSOR0_EB>,
+			<&pll CLK_TWPLL_96M>,<&pll CLK_TWPLL_76M8>,
+			<&pll CLK_TWPLL_48M>,<&ext_26m>;
+		vddio-supply = <&vddcamio>;
+		//vddcama-supply = <&vddcama>;
+		vddcamd-supply = <&vddcamd>;
+		avdd-gpios=<&ap_gpio 85 0>;
+		reset-gpios = <&ap_gpio 41 0>;
+		power-down-gpios = <&ap_gpio 45 0>;
+		sprd,phyid = <3>;
+		csi = <&csi1>;
+	};
+};
+
+&i2c1 {
+	//2M depth
+	sensor_main2: sensor-main2@6C {
+		compatible = "sprd,sensor-main2";
+		reg = <0x6C>;
+		clock-names = "clk_src","sensor_eb",
+			"clk_96m","clk_76m8",
+			"clk_48m","clk_26m";
+		clocks = <&aon_clk CLK_SENSOR1>, <&mm_gate CLK_SENSOR1_EB>,
+			<&pll CLK_TWPLL_96M>,<&pll CLK_TWPLL_76M8>,
+			<&pll CLK_TWPLL_48M>,<&ext_26m>;
+		vddio-supply = <&vddcamio>;
+		vddcama-supply = <&vddcama>;
+		reset-gpios = <&ap_gpio 45 0>;
+		power-down-gpios = <&ap_gpio 88 0>;
+		sprd,phyid = <2>;
+		csi = <&csi1>;
+	};
+};
+
+&i2c1 {
+	//2M macro
+	sensor_main3: sensor_main3@20 {
+		compatible = "sprd,sensor-main3";
+		reg = <0x20>;
+		clock-names = "clk_src","sensor_eb",
+			"clk_96m","clk_76m8",
+			"clk_48m","clk_26m";
+		clocks = <&aon_clk CLK_SENSOR1>, <&mm_gate CLK_SENSOR1_EB>,
+			<&pll CLK_TWPLL_96M>,<&pll CLK_TWPLL_76M8>,
+			<&pll CLK_TWPLL_48M>,<&ext_26m>;
+		vddio-supply = <&vddcamio>;
+		vddcama-supply = <&vddcama>;
+		//vddcamd-supply = <&vddcamio>;
+		dvdd-gpios=<&ap_gpio 136 0>;
+		reset-gpios = <&ap_gpio 40 0>;
+		sprd,phyid = <4>;
+		csi = <&csi1>;
+	};
+};
+
+&i2c0 {
+	status = "okay";
+	clock-frequency = <400000>;
+
+	// 16M
+	sensor_main: sensor-main@20 {
+		compatible = "sprd,sensor-main";
+		reg = <0x20>;
+		clock-names = "clk_src","sensor_eb",
+			"clk_96m","clk_76m8",
+			"clk_48m","clk_26m";
+		clocks = <&aon_clk CLK_SENSOR0>, <&mm_gate CLK_SENSOR0_EB>,
+			<&pll CLK_TWPLL_96M>,<&pll CLK_TWPLL_76M8>,
+			<&pll CLK_TWPLL_48M>,<&ext_26m>;
+		vddio-supply = <&vddcamio>;
+		vddcamd-supply = <&vddcamd>;
+		vddcama-supply = <&vddcama>;
+		vddcammot-supply = <&vddcammot>;
+		avdd-gpios=<&ap_gpio 97 0>;
+		reset-gpios = <&ap_gpio 44 0>;
+		//power-down-gpios = <&ap_gpio 46 0>;
+		sprd,phyid = <1>;
+		csi = <&csi0>;
+	};
+
+	// 8M ultra wide
+	sensor_sub2: sensor-sub2@7C {
+		compatible = "sprd,sensor-sub2";
+		reg = <0x7C>;
+		clock-names = "clk_src","sensor_eb",
+			"clk_96m","clk_76m8",
+			"clk_48m","clk_26m";
+		clocks = <&aon_clk CLK_SENSOR0>, <&mm_gate CLK_SENSOR0_EB>,
+			<&pll CLK_TWPLL_96M>,<&pll CLK_TWPLL_76M8>,
+			<&pll CLK_TWPLL_48M>,<&ext_26m>;
+		vddio-supply = <&vddcamio>;
+		//vddcama-supply = <&vddcama>;
+		vddcamd-supply = <&vddcamd>;
+		avdd-gpios=<&ap_gpio 135 0>;
+		reset-gpios = <&ap_gpio 47 0>;
+		power-down-gpios = <&ap_gpio 125 0>;
+		sprd,phyid = <3>;
+		csi = <&csi1>;
+	};
+};
+
+&i2c4 {
+	/delete-node/ flash-ic@63;
+	/delete-node/ charger@6a;
+};
+
+&i2c4 {
+	bq2560x_chg: charger@6b {
+		compatible = "ti,bq25601_chg";
+		reg = <0x6b>;
+		phys = <&hsphy>;
+		monitored-battery = <&bat>;
+		vddvbus:otg-vbus {
+			regulator-name = "vddvbus";
+		};
+	};
+
+	flash_ic: flash-ic@63 {
+		compatible = "sprd,flash-aw36518";
+		reg = <0x63>;
+		sprd,flash-ic = <36518>;
+		sprd,torch = <1>;
+		sprd,preflash = <1>;
+		sprd,highlight = <1>;
+		sprd,torch-level = <10>;
+		sprd,preflash-level = <10>;
+		sprd,highlight-level = <15>;
+		sprd,lvfm-enable = <1>;
+		flash-chip-en-gpios = <&ap_gpio 89 0>;
+		flash-en-gpios = <&ap_gpio 76 0>;
+		flash-sync-gpios = <&ap_gpio 141 0>;
+	};
+
+	nfc_pn5xx: pn544@29 {
+		compatible = "nxp,pn544";
+		reg = <0x29>;
+		interrupt-parent = <&ap_gpio>;
+		interrupts = <94 0>;
+		nxp,pn544-irq = <&ap_gpio 121 0>;
+		nxp,pn544-clkreq = <&ap_gpio 94 0>;
+		nxp,pn544-ven = <&ap_gpio 95 0>;
+		nxp,pn544-fw-dwnld = <&ap_gpio 96 0>;
+		interrupt-names = "nfc_int";
+		clock-names = "bb_clk","source","enable";
+		clocks =<&aon_clk CLK_AUX1>,<&ext_26m>,<&aonapb_gate CLK_AUX1_EB>;
+	};
+};
+
+&i2c5 {
+	status = "okay";
+	clock-frequency = <400000>;
+
+	aw881xx_smartpa:aw881xx@34 {
+		compatible = "awinic,aw881xx_smartpa";
+		#sound-dai-cells = <1>;
+		reg = <0x34>;
+		reset-gpio = <&ap_gpio 63 0>;
+		monitor-flag = <1>;
+		monitor-timer-val = <30000>;
+		status = "okay";
+	};
+};
+
+/ {
+	vaudio_iis: vaudio_iis {
+		compatible = "sprd,vaudio";
+		#sound-dai-cells = <1>;
+	};
+};
+
+&vaudio {
+	clock-names = "tuned_26m";
+	clocks = <&rpll CLK_AUDIO_GATE>;
+};
+
+&sound_sprd_ap_alliis {
+	status = "okay";
+	sprd-audio-card,dai-link@6 {
+		plat {
+			sound-dai = <&sprd_pcm_iis>;
+		};
+		cpu {
+			sound-dai = <&i2s0>;
+		};
+		codec {
+			sound-dai = <&aw881xx_smartpa 0>;
+		};
+	};
+	sprd-audio-card,dai-link@7 {
+		plat {
+			sound-dai = <0>;
+		};
+		cpu {
+			// Voice through aw smart pa(a dummy dai)
+			sound-dai = <&vaudio_iis 2>;
+		};
+		codec {
+			sound-dai = <&aw881xx_smartpa 0>;
+		};
+	};
+};
+
+&bat {
+		charge-term-current-microamp = <150000>;
+		constant_charge_voltage_max_microvolt = <4400000>;
+		constant_charge_current_max_microamp = <3400000>;
+		voltage-min-design-microvolt = <3450000>;
+		ocv-capacity-celsius = <25>;
+		batt-id-list = <300 10>;  /* kohm, scud / ningde */
+		charge-full-design-microamp-hours = <4997000>;
+		factory-internal-resistance-micro-ohms = <200000>;
+		ocv-capacity-table-0 = <4374000 100>, <4308000 95>, <4250000 90>,
+					<4193000 85>, <4139000 80>, <4086000 75>,
+					<4037000 70>, <3992000 65>, <3951000 60>,
+					<3896000 55>, <3860000 50>, <3836000 45>,
+					<3814000 40>, <3797000 35>, <3784000 30>,
+					<3767000 25>, <3749000 20>, <3726000 15>,
+					<3697000 10>, <3683000 5>, <3400000 0>;
+		charge-full-design2-microamp-hours = <4905000>;
+		factory-internal-resistance2-micro-ohms = <128000>;
+		ocv-capacity-table2-0 = <4383000 100>, <4307000 95>, <4247000 90>,
+					<4192000 85>, <4137000 80>, <4085000 75>,
+					<4036000 70>, <3988000 65>, <3951000 60>,
+					<3901000 55>, <3859000 50>, <3835000 45>,
+					<3816000 40>, <3800000 35>, <3787000 30>,
+					<3770000 25>, <3751000 20>, <3728000 15>,
+					<3697000 10>, <3688000 5>, <3400000 0>;
+		/* NTC 100k, Vref 1850mV, R pull-up 110K, R pull-down 200k */
+		voltage-temp-table = <1142302 750>, <1124233 800>, <1101233 850>,
+					<1072536 900>, <1037442 950>, <995634 1000>,
+					<946936 1050>, <891766 1100>, <830977 1150>,
+					<765857 1200>, <698113 1250>, <629571 1300>,
+					<562069 1350>, <497228 1400>, <436397 1450>,
+					<380362 1500>, <329745 1550>, <284636 1600>,
+					<244918 1650>, <210360 1700>, <180383 1750>;
+		charge-sdp-current-microamp = <700000 500000>;
+		charge-dcp-current-microamp = <3400000 2100000>;
+		charge-cdp-current-microamp = <3400000 2100000>;
+		charge-unknown-current-microamp = <700000 500000>;
+	};
+
+&pmic_fgu {
+	monitored-battery = <&bat>;
+	sprd,calib-resistance-real = <9900>;
+	sprd,calib-resistance-spec = <20000>;
+	io-channels = <&pmic_adc 0>, <&pmic_adc 3>, <&pmic_adc 14>;
+	io-channel-names = "adc-batt-id", "bat-temp", "charge-vol";
+};
+
+/ {
+	charger-manager {
+		cm-fullbatt-voltage = <4350000>;
+		cm-fullbatt-current = <150000>;
+
+		/* in deci centigrade */
+		cm-battery-cold = <0>;
+		cm-battery-hot = <550>;
+		cm-battery-temp-diff = <30>;
+		cm-tickle-time-out = <180>;
+
+		cm-jeita-temp-table = <1000 1030 0 4400000>,
+				<1050 1080 1300000 4400000>,
+				<1100 1130 1300000 4400000>,
+				<1450 1420 3400000 4400000>,
+				<1550 1520 1700000 4100000>;
+
+		cm-chargers = "hook";
+		cm-hardware-psy = "bq25601_charger";
+		monitored-battery = <&bat>;
+		phys = <&hsphy>;
+	};
+};
+
+&extcon_gpio {
+	/delete-property/ id-gpio;
+};
+/ {
+	tpa_thermistor:pa-sensor {
+		compatible = "generic-adc-thermal";
+		#thermal-sensor-cells = <0>;
+		io-channels = <&pmic_adc 2>;
+		io-channel-names = "sensor-channel";
+		temperature-lookup-table = <	(-39742) 1131
+						(-29777) 1110
+						(-19480) 1074
+						(-4679) 983
+						10110 838
+						24805 654
+						44922 413
+						54903 316
+						64895 238
+						74884 178
+						84883 133
+						94883 100
+						104880 75
+						114889 57
+						124872 43 >;
+	};
+
+	tchg_thermistor:chg-sensor {
+		compatible = "generic-adc-thermal";
+		#thermal-sensor-cells = <0>;
+		io-channels = <&pmic_adc 4>;
+		io-channel-names = "sensor-channel";
+		temperature-lookup-table = <	(-39742) 1131
+						(-29777) 1110
+						(-19480) 1074
+						(-4679) 983
+						10110 838
+						24805 654
+						44922 413
+						54903 316
+						64895 238
+						74884 178
+						84883 133
+						94883 100
+						104880 75
+						114889 57
+						124872 43 >;
+	};
+};
+
+&thm_zone {
+	pa_thmzone: pa-thmzone {
+		polling-delay-passive = <0>;
+		polling-delay = <0>;
+		thermal-sensors = <&tpa_thermistor>;
+	};
+};
+
+&thm_zone {
+	chg_thmzone: chg-thmzone {
+		polling-delay-passive = <0>;
+		polling-delay = <0>;
+		thermal-sensors = <&tchg_thermistor>;
+	};
+};
+
